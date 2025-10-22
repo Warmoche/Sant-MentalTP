@@ -1,0 +1,82 @@
+---
+title: "Devoir 05 - Santé mentale dans le secteur technologique"
+author: "Robinson Cacquevel"
+date: "22/10/2025"
+output: github_document
+---
+
+### Section 1 — Introduction
+
+**Question de recherche :**  
+Quels facteurs influencent la probabilité qu’un employé du secteur technologique ait recours à un traitement pour sa santé mentale ?
+
+**Description du jeu de données :**  
+Le jeu de données provient de Kaggle : [Mental Health in Tech Survey](https://www.kaggle.com/datasets/osmi/mental-health-in-tech-survey).  
+Il contient **1 259 observations** et **27 variables**, collectées via un sondage auprès d’employés du secteur technologique.
+
+**Types de variables :**  
+- Catégorielles : `gender`, `country`, `self_employed`, `family_history`, `work_interfere`, `treatment`, etc.  
+- Numériques discrètes : `age`, `num_employees`  
+- Numériques continues : `age` peut être traitée comme continue.
+
+**Pourquoi ce jeu de données :**  
+Il permet d’analyser des relations entre **caractéristiques démographiques et comportement face à la santé mentale**, ce qui est directement lié au thème du cours sur l’exploration et l’analyse de données.
+
+---
+
+### Section 2 — Données
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(skimr)
+```
+
+
+---
+
+### Section 3 — Plan d’analyse
+
+**Variable de réponse (Y) :**  
+`treatment` — indique si la personne a **déjà eu recours à un traitement** pour un problème de santé mentale (Oui / Non).  
+→ C’est une **variable binaire** (0 = Non, 1 = Oui) qui servira à modéliser la probabilité de traitement.
+
+**Variables explicatives (X) potentielles :**  
+- `age` — âge de la personne (numérique)  
+- `gender` — genre (catégorielle)  
+- `family_history` — antécédents familiaux de troubles mentaux (Oui / Non)  
+- `work_interfere` — fréquence à laquelle la santé mentale interfère avec le travail  
+- `self_employed` — statut d’emploi indépendant ou salarié  
+- `country` — pays de résidence  
+- `remote_work` — travaille-t-il à distance ? (Oui / Non)
+
+**Comparaisons prévues :**  
+- Différences dans la probabilité de traitement entre **hommes et femmes**  
+- Influence de **l’âge** (ex. jeunes vs plus âgés)  
+- Impact des **antécédents familiaux** sur la probabilité de traitement  
+- Effet du **travail à distance** sur le recours au traitement
+
+**Méthodes et visualisations prévues :**
+- **Histogrammes et diagrammes à barres** pour visualiser les distributions de variables comme `age` et `gender`.  
+- **Boxplots** pour comparer l’âge selon le statut de traitement (`treatment`).  
+- **Tableaux de contingence** pour explorer les liens entre `treatment` et des variables catégorielles (`family_history`, `remote_work`, etc.).  
+- **Modèle linéaire ou logistique simple** (`glm`) pour estimer les relations entre `treatment` et les facteurs explicatifs.  
+- **Visualisations ggplot2** (nuages de points, barres empilées, etc.) pour illustrer les résultats.
+
+**Hypothèses / attentes :**
+1. Les personnes avec **des antécédents familiaux** de troubles mentaux auront une probabilité plus élevée de traitement.  
+2. Les **employés plus jeunes** sont plus enclins à chercher de l’aide qu’avant.  
+3. Les **travailleurs à distance** pourraient rapporter une meilleure gestion mentale, donc une probabilité moindre de traitement.  
+4. Il existera des **différences selon le genre**, avec une plus forte probabilité chez les femmes.
+
+---
+
+### Préparation initiale du jeu de données (pour analyses futures)
+
+```{r prep-data}
+# Créer une version simplifiée du dataset avec les variables d'intérêt
+mental_health_subset <- df %>%
+  select(age, gender, family_history, work_interfere, self_employed, country, remote_work, treatment)
+
+# Aperçu des premières lignes
+head(mental_health_subset)

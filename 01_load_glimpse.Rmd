@@ -1,0 +1,45 @@
+---
+  title: "Devoir 05 - Santé mentale dans le secteur technologique"
+author: "Robinson Cacquevel"
+date: "22/10/2025"
+output: github_document
+---
+  
+  ### Chargement des librairies et des données
+  
+```{r load-packages, message = FALSE}
+library(tidyverse)
+library(skimr)
+library(janitor)
+```
+
+```{r load-data, message = FALSE}
+# Importer le fichier CSV
+df <- read_csv("data/mental_health.csv", show_col_types = FALSE)
+
+# Nettoyer les noms de colonnes
+df <- df %>% clean_names()
+```
+
+### Aperçu des données
+
+```{r glimpse}
+glimpse(df)
+```
+
+Le jeu de données contient `r nrow(df)` observations et `r ncol(df)` variables.
+
+### Résumé statistique
+
+```{r summary}
+skim(df)
+```
+
+### Nettoyage de base
+
+```{r save-clean}
+# Sauvegarde du jeu de données nettoyé
+saveRDS(df, "data/mental_health.rds")
+```
+
+Les données sont maintenant prêtes pour l’exploration dans un prochain script.
