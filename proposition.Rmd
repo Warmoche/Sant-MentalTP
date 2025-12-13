@@ -25,7 +25,7 @@ Il contient **1 259 observations** et **27 variables**, collectées via un sonda
 - Numériques continues : `age` peut être traitée comme continue.
 
 **Pourquoi ce jeu de données :**  
-Il permet d’analyser des relations entre **caractéristiques démographiques et comportement face à la santé mentale**, ce qui est directement lié au thème du cours sur l’exploration et l’analyse de données.
+Il permet d'analyser des relations entre **caractéristiques démographiques et comportement face à la santé mentale** ainsi que l'impact de **l'environnement de travail et des ressources de soutien** sur le bien-être mental des employés. Ces deux axes d'analyse complémentaires sont directement liés au thème du cours sur l'exploration et l'analyse de données.
 
 ---
 
