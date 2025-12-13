@@ -7,8 +7,13 @@ output: github_document
 
 ### Section 1 — Introduction
 
-**Question de recherche :**  
-Quels facteurs influencent la probabilité qu’un employé du secteur technologique ait recours à un traitement pour sa santé mentale ?
+**Questions de recherche :**  
+
+1. **Question 1 (Facteurs individuels) :**  
+   Quels facteurs individuels (âge, genre, antécédents familiaux) influencent la probabilité qu'un employé du secteur technologique ait recours à un traitement pour sa santé mentale ?
+
+2. **Question 2 (Environnement de travail) :**  
+   Comment l'environnement de travail et les ressources de soutien mises à disposition par l'entreprise (programmes de bien-être, options de soins, anonymat) affectent-ils la perception et la gestion de la santé mentale des employés ?
 
 **Description du jeu de données :**  
 Le jeu de données provient de Kaggle : [Mental Health in Tech Survey](https://www.kaggle.com/datasets/osmi/mental-health-in-tech-survey).  
@@ -20,7 +25,7 @@ Il contient **1 259 observations** et **27 variables**, collectées via un sonda
 - Numériques continues : `age` peut être traitée comme continue.
 
 **Pourquoi ce jeu de données :**  
-Il permet d’analyser des relations entre **caractéristiques démographiques et comportement face à la santé mentale**, ce qui est directement lié au thème du cours sur l’exploration et l’analyse de données.
+Il permet d'analyser des relations entre **caractéristiques démographiques et comportement face à la santé mentale** ainsi que l'impact de **l'environnement de travail et des ressources de soutien** sur le bien-être mental des employés. Ces deux axes d'analyse complémentaires sont directement liés au thème du cours sur l'exploration et l'analyse de données.
 
 ---
 
@@ -35,48 +40,101 @@ library(skimr)
 
 ---
 
-### Section 3 — Plan d’analyse
+### Section 3 — Plan d'analyse
+
+#### Question 1 : Facteurs individuels et recours au traitement
 
 **Variable de réponse (Y) :**  
 `treatment` — indique si la personne a **déjà eu recours à un traitement** pour un problème de santé mentale (Oui / Non).  
-→ C’est une **variable binaire** (0 = Non, 1 = Oui) qui servira à modéliser la probabilité de traitement.
+→ C'est une **variable binaire** (0 = Non, 1 = Oui) qui servira à modéliser la probabilité de traitement.
 
-**Variables explicatives (X) potentielles :**  
+**Variables explicatives (X) pour Question 1 :**  
 - `age` — âge de la personne (numérique)  
 - `gender` — genre (catégorielle)  
 - `family_history` — antécédents familiaux de troubles mentaux (Oui / Non)  
 - `work_interfere` — fréquence à laquelle la santé mentale interfère avec le travail  
-- `self_employed` — statut d’emploi indépendant ou salarié  
+- `self_employed` — statut d'emploi indépendant ou salarié  
 - `country` — pays de résidence  
 - `remote_work` — travaille-t-il à distance ? (Oui / Non)
 
-**Comparaisons prévues :**  
+**Comparaisons prévues pour Question 1 :**  
 - Différences dans la probabilité de traitement entre **hommes et femmes**  
-- Influence de **l’âge** (ex. jeunes vs plus âgés)  
+- Influence de **l'âge** (ex. jeunes vs plus âgés)  
 - Impact des **antécédents familiaux** sur la probabilité de traitement  
 - Effet du **travail à distance** sur le recours au traitement
 
-**Méthodes et visualisations prévues :**
+**Méthodes et visualisations pour Question 1 :**
 - **Histogrammes et diagrammes à barres** pour visualiser les distributions de variables comme `age` et `gender`.  
-- **Boxplots** pour comparer l’âge selon le statut de traitement (`treatment`).  
+- **Boxplots** pour comparer l'âge selon le statut de traitement (`treatment`).  
 - **Tableaux de contingence** pour explorer les liens entre `treatment` et des variables catégorielles (`family_history`, `remote_work`, etc.).  
-- **Modèle linéaire ou logistique simple** (`glm`) pour estimer les relations entre `treatment` et les facteurs explicatifs.  
-- **Visualisations ggplot2** (nuages de points, barres empilées, etc.) pour illustrer les résultats.
+- **Modèle logistique** (`glm`) pour estimer les relations entre `treatment` et les facteurs individuels.  
+- **Visualisations ggplot2** (barres empilées, boxplots groupés, etc.) pour illustrer les résultats.
 
-**Hypothèses / attentes :**
+**Hypothèses / attentes pour Question 1 :**
 1. Les personnes avec **des antécédents familiaux** de troubles mentaux auront une probabilité plus élevée de traitement.  
-2. Les **employés plus jeunes** sont plus enclins à chercher de l’aide qu’avant.  
+2. Les **employés plus jeunes** sont plus enclins à chercher de l'aide qu'avant.  
 3. Les **travailleurs à distance** pourraient rapporter une meilleure gestion mentale, donc une probabilité moindre de traitement.  
 4. Il existera des **différences selon le genre**, avec une plus forte probabilité chez les femmes.
+
+---
+
+#### Question 2 : Environnement de travail et soutien organisationnel
+
+**Variables d'intérêt pour Question 2 :**  
+
+*Variables liées au soutien organisationnel :*  
+- `benefits` — l'employeur offre-t-il des prestations de santé mentale ? (Oui / Non / Ne sait pas)  
+- `care_options` — connaît-il les options de soins disponibles ? (Oui / Non / Ne sait pas)  
+- `wellness_program` — l'entreprise a-t-elle un programme de bien-être ? (Oui / Non / Ne sait pas)  
+- `seek_help` — l'employeur propose-t-il des ressources pour chercher de l'aide ? (Oui / Non / Ne sait pas)  
+- `anonymity` — l'anonymat est-il protégé si on utilise les ressources mentales ? (Oui / Non / Ne sait pas)
+
+*Variables liées à la perception et à la stigmatisation :*  
+- `mental_health_consequence` — y a-t-il des conséquences négatives à discuter de santé mentale au travail ?  
+- `coworkers` — se sentirait-il à l'aise d'en parler avec des collègues ?  
+- `supervisor` — se sentirait-il à l'aise d'en parler avec son superviseur ?  
+- `mental_health_interview` — mentionnerait-il un problème de santé mentale lors d'un entretien d'embauche ?
+
+**Comparaisons prévues pour Question 2 :**  
+- Comparaison de la **perception de stigmatisation** entre entreprises avec et sans programmes de bien-être  
+- Relation entre la **connaissance des options de soins** et le confort à parler de santé mentale  
+- Impact de l'**anonymat garanti** sur la volonté de chercher de l'aide  
+- Différences de perception selon la **taille de l'entreprise** (`no_employees`)
+
+**Méthodes et visualisations pour Question 2 :**
+- **Diagrammes à barres empilées** pour visualiser la distribution des ressources de soutien disponibles  
+- **Heatmaps ou graphiques de corrélation** pour explorer les relations entre ressources et perception  
+- **Boxplots groupés** pour comparer les niveaux de confort selon la présence de programmes de soutien  
+- **Analyse de correspondance ou tableaux croisés** pour explorer les associations entre variables catégorielles  
+- **Graphiques à facettes (facet_wrap)** pour comparer les tendances entre différents contextes organisationnels
+
+**Hypothèses / attentes pour Question 2 :**
+1. Les employés dans des entreprises offrant des **programmes de bien-être** auront une perception plus positive de la santé mentale au travail.  
+2. La **garantie d'anonymat** sera associée à un plus grand confort pour discuter de problèmes de santé mentale.  
+3. Les employés qui **connaissent les options de soins** seront plus enclins à chercher de l'aide.  
+4. Les **grandes entreprises** (plus de 100 employés) offriront plus de ressources que les petites structures.
 
 ---
 
 ### Préparation initiale du jeu de données (pour analyses futures)
 
 ```{r prep-data}
-# Créer une version simplifiée du dataset avec les variables d'intérêt
+# Créer une version simplifiée du dataset avec les variables d'intérêt pour les deux questions
+
+# Variables pour Question 1 (facteurs individuels)
+vars_q1 <- c("age", "gender", "family_history", "work_interfere", "self_employed", 
+             "country", "remote_work", "treatment")
+
+# Variables pour Question 2 (environnement de travail et soutien)
+vars_q2 <- c("benefits", "care_options", "wellness_program", "seek_help", "anonymity",
+             "mental_health_consequence", "coworkers", "supervisor", 
+             "mental_health_interview", "no_employees", "tech_company")
+
+# Dataset combiné avec toutes les variables d'intérêt
 mental_health_subset <- df %>%
-  select(age, gender, family_history, work_interfere, self_employed, country, remote_work, treatment)
+  select(all_of(c(vars_q1, vars_q2))) %>%
+  distinct()  # Enlever les doublons éventuels
 
 # Aperçu des premières lignes
 head(mental_health_subset)
+```
