@@ -1,0 +1,101 @@
+title: "Devoir 05 - Santé mentale dans le secteur technologique"
+author: "Robinson Cacquevel"
+date: "22/10/2025"
+output: github_document
+---
+
+## 1. Introduction
+
+Dans ce projet, nous analysons les données du sondage **"Mental Health in Tech Survey"** (Kaggle) portant sur la santé mentale de personnes travaillant dans le secteur technologique.
+
+Nous nous concentrons sur deux questions de recherche :
+
+1. **Accès au traitement (Q1)** : Quels facteurs personnels et professionnels sont associés au fait d’avoir déjà reçu un **traitement** pour un problème de santé mentale (`treatment`, Yes/No) ?
+2. **Interférence avec le travail (Q2)** : Dans quelle mesure la santé mentale **interfère avec le travail** (`work_interfere`) et comment ce niveau d’interférence est-il lié aux **politiques et au climat de l’entreprise** (bénéfices, options de soins, anonymat, etc.) ?
+
+## 2. Données
+
+```{r load-packages, message = FALSE}
+library(tidyverse)
+library(skimr)
+library(janitor)
+```
+
+```{r load-data, message = FALSE}
+df <- readRDS("data/mental_health.rds") |> clean_names()
+```
+
+Le jeu de données contient `r nrow(df)` observations et `r ncol(df)` variables.
+
+```{r glimpse, message = FALSE}
+glimpse(df)
+```
+
+```{r summary, message = FALSE}
+skim(df)
+```
+
+Les variables comprennent des informations démographiques (`age`, `gender`, `country`, `no_employees`, `self_employed`), des indicateurs de santé mentale (`treatment`, `family_history`, `work_interfere`) et des variables décrivant les politiques de l’entreprise (`benefits`, `care_options`, `anonymity`, etc.).
+
+## 3. Méthodes
+
+- Analyses **descriptives** : tableaux de fréquences, proportions, résumés numériques et visualisations avec `ggplot2`.
+- Pour Q1, nous examinons la relation entre `treatment` et des variables explicatives comme `family_history`, `age`, `gender` et `no_employees`.
+- Pour Q2, nous étudions la distribution de `work_interfere` et son association avec des indicateurs de climat organisationnel (`benefits`, `care_options`, etc.).
+- Les analyses sont réalisées dans le script `script/02_eda.R`, et nous réutilisons ici les principaux tableaux et graphiques.
+
+```{r load-eda-objects, message = FALSE}
+load("data/eda_objects.RData")
+```
+
+## 4. Résultats
+
+### 4.1 Accès au traitement (Q1)
+
+```{r q1-table, echo = FALSE}
+q1_tab_family_treatment
+```
+
+```{r q1-plot, echo = FALSE}
+plot_q1_family_treatment
+```
+
+**Interprétation (bref résumé)** :
+
+- Les personnes déclarant des **antécédents familiaux** de troubles mentaux ont une proportion plus élevée de traitement que celles sans antécédents.
+- Cela suggère que l’historique familial est un facteur important associé à l’accès ou au recours au traitement.
+
+### 4.2 Interférence avec le travail (Q2)
+
+```{r q2-table, echo = FALSE}
+q2_tab_work_interfere
+```
+
+```{r q2-plot, echo = FALSE}
+plot_q2_work_interfere
+```
+
+**Interprétation (bref résumé)** :
+
+- Une part non négligeable des répondant·e·s rapporte que la santé mentale interfère **parfois**, **souvent** voire **très souvent** avec le travail.
+- Cela met en évidence l’importance de considérer la santé mentale comme un enjeu de performance et de bien-être au travail.
+
+### 4.3 Interférence et climat de l’entreprise
+
+```{r q2-benefits-plot, echo = FALSE}
+plot_q2_benefits
+```
+
+**Interprétation (bref résumé)** :
+
+- Dans les entreprises offrant des **bénéfices de santé mentale**, la proportion de personnes déclarant une forte interférence semble différente de celle observée dans les entreprises sans bénéfices.
+- Cela suggère que les politiques de soutien peuvent être liées à la manière dont la santé mentale interfère avec le travail, même si des analyses plus poussées seraient nécessaires pour établir des relations causales.
+
+## 5. Discussion et limites
+
+- Les résultats indiquent des liens plausibles entre antécédents familiaux et traitement, ainsi qu’entre climat organisationnel et interférence avec le travail.
+- Cependant, il s’agit de **données observationnelles auto-rapportées**, sujettes à des biais (sélection, mémoire, désirabilité sociale).
+- Les variables ne couvrent pas tous les aspects de la santé mentale (diagnostics précis, durée des troubles, types de traitement, etc.).
+- Des modèles statistiques plus avancés (par ex. régression logistique pour `treatment`, modèles ordonnés pour `work_interfere`) pourraient affiner les conclusions.
+
+Dans l’ensemble, les analyses mettent en évidence l’importance du contexte personnel (antécédents familiaux) et organisationnel (bénéfices, politiques) pour comprendre la santé mentale dans le secteur technologique.

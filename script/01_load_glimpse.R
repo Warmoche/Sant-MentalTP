@@ -1,7 +1,6 @@
 # scripts/01_load_glimpse.R
 # 1) Installer packages si besoin (décommenter si nécessaire)
 # install.packages(c("tidyverse","skimr","janitor"))
-
 library(tidyverse)
 library(skimr)
 library(janitor)
